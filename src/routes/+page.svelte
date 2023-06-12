@@ -8,9 +8,12 @@
 	let datePicked;
 
 	let parkingSpaces = [];
+	let availibility = [];
 	onMount(async () => {
-		const res = await fetch('/parkingSpaces');
-		parkingSpaces = await res.json();
+		const db_parkingSpaces = await fetch('/parkingSpaces');
+		parkingSpaces = await db_parkingSpaces.json();
+		const db_availibility = await fetch('/availability/');
+		availibility = await db_availibility.json();
 	});
 </script>
 
@@ -23,7 +26,7 @@
 	<!-- Parking spots -->
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 h-full">
 		{#each parkingSpaces as parkingSpace}
-			<ParkingSpot {datePicked} {parkingSpace} />
+			<ParkingSpot {datePicked} {parkingSpace} {availibility} />
 		{/each}
 	</div>
 </div>

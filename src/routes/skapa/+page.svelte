@@ -2,12 +2,10 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
-	let parkingSpaces = [];
+	let parkingSpaces = [Number];
 	let selectedParkingSpace;
-	let date;
-	let result;
-	let ressy;
-
+	let date = new Date().toISOString().slice(0, 10); // set date to today's date
+	let result_message = '';
 	onMount(async () => {
 		const res = await fetch('/parkingSpaces');
 		parkingSpaces = await res.json();
@@ -19,11 +17,11 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(selectedParkingSpace)
+			body: JSON.stringify({ parkingSpace: selectedParkingSpace, date: date })
 		});
-
-		result = await res.body;
-		ressy = JSON.stringify(result);
+		let result = await res.json();
+		result_message = result.body.message;
+		console.log(result.body.message);
 	}
 </script>
 
@@ -40,7 +38,7 @@
 						value={parkingSpace.id}
 						class="form-radio text-black border-white"
 					/>
-					<span>{parkingSpace.name}</span>
+					<span>{parkingSpace.id}: {parkingSpace.name}</span>
 				</div>
 			</label>
 		{/each}
@@ -60,12 +58,11 @@
 		>Submit</button
 	>
 </form>
-<pre class="text-white">
-    {JSON.stringify({ selectedParkingSpace, date })}
-</pre>
-<pre class="text-white">
-    {ressy}
-</pre>
+{#if result_message != ''}
+	<div class="my-4 px-3 py-2 rounded text-white bg-indigo-500 focus:outline-none">
+		{result_message}
+	</div>
+{/if}
 
 <style lang="postcss">
 	:global(html) {

@@ -1,18 +1,42 @@
 <script>
-	let isAvailable = false; // you can change this based on the parking spot's status
-
+	import { onMount, afterUpdate } from 'svelte';
 	import Fa from 'svelte-fa';
 	import { faCar, faCarAlt, faParking } from '@fortawesome/free-solid-svg-icons';
 	import dayjs from 'dayjs';
 
 	export let datePicked;
 	export let parkingSpace;
+	export let availibility;
+	let datePickedFormatted = dayjs(datePicked).format('YYYY-MM-DD');
+	$: {
+		datePickedFormatted = dayjs(datePicked).format('YYYY-MM-DD');
+	}
 
-	let isWeekend;
+	let filteredAvailibility = [];
+
+	$: {
+		filteredAvailibility = availibility.filter(
+			(availability) => availability.parking_space_id === parkingSpace.id
+		);
+	}
+
+	let isAvailable = false;
+	let isWeekend = false;
+
+	function updateIsAvailable() {
+		isAvailable = filteredAvailibility.some(
+			(availability) => availability.date === datePickedFormatted
+		);
+	}
 
 	$: {
 		isWeekend = dayjs(datePicked).day() === 0 || dayjs(datePicked).day() === 6;
+		updateIsAvailable();
 	}
+
+	afterUpdate(() => {
+		updateIsAvailable();
+	});
 </script>
 
 <div class="parking-spot bg-{parkingSpace.color}-500 rounded p-4 h-full">

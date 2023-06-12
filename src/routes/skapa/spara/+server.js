@@ -10,23 +10,34 @@ const db = knex({
 });
 
 export async function POST({ request }) {
-    const { description } = await request.json();
-    return json({ description }, { status: 200 });
+    let incomingData = await request.json();
     let data = {
-        parking_space_id: request.body.selectedParkingSpace,
-        date: request.body.date
+        parking_space_id: incomingData.parkingSpace,
+        date: incomingData.date
     };
 
-    await db('parking_space_availability')
+    const [insertedData] = await db('parking_space_availability')
         .insert(data)
-        .then(() => console.log('Data inserted'))
+        .returning(['parking_space_id', 'date'])
+        .then((data) => {
+            return data;
+        })
         .catch((err) => console.log(err));
+
+    const { parking_space_id, date } = insertedData;
+
+    const humanDate = new Date(date).toLocaleString('sv-SE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
     return json({
         status: 200,
         body: {
             success: true,
-            message: 'Data inserted successfully'
+            message: `Parkering öppnad för parkeringsplats ${parking_space_id} den ${humanDate}`
         }
     });
 }
