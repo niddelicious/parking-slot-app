@@ -3,6 +3,11 @@
 	import Fa from 'svelte-fa';
 	import { faCar, faCarAlt, faParking } from '@fortawesome/free-solid-svg-icons';
 	import dayjs from 'dayjs';
+	import { getContext } from 'svelte';
+	import ParkingForm from './ParkingForm.svelte';
+	const { open } = getContext('simple-modal');
+	const showBookingForm = () =>
+		open(ParkingForm, { message: "It's a modal!", parkingSpace: parkingSpace, hasForm: true });
 
 	export let datePicked;
 	export let parkingSpace;
@@ -43,7 +48,7 @@
 	<div class="parking-spot-name">{parkingSpace.name}</div>
 	<div class="parking-spot-icon">
 		{#if isAvailable}
-			<Fa icon={faParking} size="10x" />
+			<button on:click={showBookingForm}><Fa icon={faParking} size="10x" /></button>
 		{:else if isWeekend}
 			<Fa icon={faParking} size="10x" />
 		{:else}
