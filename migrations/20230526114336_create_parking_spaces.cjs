@@ -1,7 +1,7 @@
 exports.up = function (knex) {
     return knex.schema.createTable('parking_spaces', function (table) {
         table.increments('id').primary();
-        table.integer('owner_id').references('id').inTable('employees');
+        table.integer('owner_id');
         table.timestamps(true, true);
         table.timestamp('deleted_at').nullable();
     });

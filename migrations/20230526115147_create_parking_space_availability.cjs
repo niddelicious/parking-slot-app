@@ -3,7 +3,7 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.integer('parking_space_id').references('id').inTable('parking_spaces');
         table.date('date');
-        table.boolean('is_available');
+        table.integer('claimed').references('id').inTable('parking_space_claims').defaultTo(0);
         table.timestamps(true, true);
         table.timestamp('deleted_at').nullable();
     });

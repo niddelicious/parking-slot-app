@@ -13,6 +13,6 @@ const db = knex({
 const today = dayjs().format('YYYY-MM-DD');
 
 export async function GET() {
-    const availableParkingSpaces = await db.column('parking_space_id', 'date').select().from('parking_space_availability').where('date', '>=', today);
+    const availableParkingSpaces = await db.column('id', 'parking_space_id', 'date', 'claimed').select().from('parking_space_availability').where('date', '>=', today);
     return json(availableParkingSpaces);
 }

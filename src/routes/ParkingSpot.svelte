@@ -7,11 +7,16 @@
 	import ParkingForm from './ParkingForm.svelte';
 	const { open } = getContext('simple-modal');
 	const showBookingForm = () =>
-		open(ParkingForm, { message: "It's a modal!", parkingSpace: parkingSpace, hasForm: true });
+		open(ParkingForm, {
+			parking_space_availability_id: parking_space_availability_id,
+			parkingSpace: parkingSpace,
+			hasForm: true
+		});
 
 	export let datePicked;
 	export let parkingSpace;
 	export let availibility;
+
 	let datePickedFormatted = dayjs(datePicked).format('YYYY-MM-DD');
 	$: {
 		datePickedFormatted = dayjs(datePicked).format('YYYY-MM-DD');
@@ -27,16 +32,33 @@
 
 	let isAvailable = false;
 	let isWeekend = false;
+	let parking_space_availability_id = null;
+	let claimant_name = null;
 
-	function updateIsAvailable() {
-		isAvailable = filteredAvailibility.some(
+	async function updateIsAvailable() {
+		let foundAvailability = filteredAvailibility.find(
 			(availability) => availability.date === datePickedFormatted
 		);
+		if (foundAvailability) {
+			if (foundAvailability.claimed > 0) {
+				let claimed = await fetch('/claims/' + foundAvailability.claimed);
+				let claim = await claimed.json();
+				claimant_name = claim[0].claimant_name;
+				isAvailable = false;
+				parking_space_availability_id = null;
+			} else {
+				isAvailable = true;
+				parking_space_availability_id = foundAvailability.id;
+			}
+		} else {
+			claimant_name = null;
+			isAvailable = false;
+			parking_space_availability_id = null;
+		}
 	}
 
 	$: {
 		isWeekend = dayjs(datePicked).day() === 0 || dayjs(datePicked).day() === 6;
-		updateIsAvailable();
 	}
 
 	afterUpdate(() => {
@@ -45,7 +67,13 @@
 </script>
 
 <div class="parking-spot bg-{parkingSpace.color}-500 rounded p-4 h-full">
-	<div class="parking-spot-name">{parkingSpace.name}</div>
+	<div class="parking-spot-name">
+		{#if claimant_name}
+			{claimant_name}
+		{:else}
+			{parkingSpace.name}
+		{/if}
+	</div>
 	<div class="parking-spot-icon">
 		{#if isAvailable}
 			<button on:click={showBookingForm}><Fa icon={faParking} size="10x" /></button>

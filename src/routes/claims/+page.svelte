@@ -12,7 +12,7 @@
 	});
 
 	async function submitForm() {
-		const res = await fetch('/boka/spara', {
+		const res = await fetch('/claims/save', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

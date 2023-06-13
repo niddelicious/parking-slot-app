@@ -11,5 +11,7 @@ export default {
     'bg-yellow-500',
     'bg-blue-500',
     'bg-purple-500',
-  ]
+    'bg-orange-500',
+    'bg-neutral-800',
+  ] // For tailwind colors to work properly they need to be safelisted, otherwise they will not be rendered,
 }
