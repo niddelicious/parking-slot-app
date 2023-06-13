@@ -1,6 +1,8 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 	import { goto } from '$app/navigation';
+
+	const dispatch = createEventDispatcher();
 
 	let parkingSpaces = [Number];
 	let selectedParkingSpace;
@@ -12,7 +14,7 @@
 	});
 
 	async function submitForm() {
-		const res = await fetch('/skapa/spara', {
+		const res = await fetch('/create/save', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -21,7 +23,7 @@
 		});
 		let result = await res.json();
 		result_message = result.body.message;
-		console.log(result.body.message);
+		dispatch('parkingUpdated');
 	}
 </script>
 

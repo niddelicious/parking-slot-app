@@ -1,7 +1,7 @@
 <script>
 	import Fa from 'svelte-fa';
 	import { faX, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-	import { getContext } from 'svelte';
+	import { getContext, createEventDispatcher } from 'svelte';
 	export let parkingSpace;
 	export let parking_space_availability_id;
 	export let hasForm = false;
@@ -9,10 +9,10 @@
 	export let onOkay = () => {};
 
 	const { close } = getContext('simple-modal');
+	const dispatch = createEventDispatcher();
 
 	let claimant_name = '';
 	let onChange = () => {};
-	let unique = {};
 
 	function _onCancel() {
 		onCancel();
@@ -32,16 +32,11 @@
 			})
 		});
 		let result = await res.json();
-		console.log('result', result.body.message);
-		unique = {};
+		dispatch('parkingUpdated');
 		close();
 	}
 
 	$: onChange(claimant_name);
-
-	onDestroy(() => {
-		unique = {};
-	});
 </script>
 
 <div class="rounded p-2 bg-{parkingSpace.color}-500 px-4 w-96">
