@@ -1,52 +1,50 @@
-<script>
+<script lang="ts">
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/sv';
 	import { Datepicker, themes } from 'svelte-calendar';
+	import { parkingStore } from './parkingStore'; // import the store
+	import type { Writable } from 'svelte/store';
+
 	const { dark: theme } = themes;
 
-	export let selectedDate;
 	const startOfWeekIndex = 1;
 	const defaultFormat = 'dddd D MMMM, YYYY';
-	let store;
+	let store: Writable<{ hasChosen: boolean; selected: Date }>;
 
 	let locale = 'sv';
 	dayjs.locale(locale);
-	export let datePicked;
+
+	// The selected date is now obtained directly from the store
+	let datePicked = $parkingStore.selectedDate;
 
 	$: if ($store?.hasChosen) {
 		datePicked = $store.selected;
-	} else {
-		datePicked = selectedDate;
+		// Update the selectedDate in the parkingStore
+		parkingStore.update((store) => {
+			store.selectedDate = datePicked;
+			return store;
+		});
 	}
 </script>
 
 <Datepicker
 	{theme}
-	bind:start={selectedDate}
+	bind:start={$parkingStore.selectedDate}
 	{startOfWeekIndex}
 	bind:store
 	let:key
 	let:send
 	let:receive
 >
-	<button in:receive|local={{ key }} out:send|local={{ key }}>
+	<button
+		class="bg-zinc-900 text-white text-xl font-bold py-4 px-8 rounded text-lg focus:outline-none focus:shadow-outline capitalize cursor-pointer"
+		in:receive|local={{ key }}
+		out:send|local={{ key }}
+	>
 		{#if $store?.hasChosen}
 			{dayjs($store.selected).format(defaultFormat)}
 		{:else}
-			{dayjs(selectedDate).format(defaultFormat)}
+			{dayjs($parkingStore.selectedDate).format(defaultFormat)}
 		{/if}
 	</button>
 </Datepicker>
-
-<style lang="postcss">
-	button {
-		background: rgba(35, 35, 35, 1);
-		color: #fff;
-		border: 0;
-		padding: 18px 30px;
-		font-size: 1.2em;
-		border-radius: 6px;
-		cursor: pointer;
-		text-transform: capitalize;
-	}
-</style>

@@ -1,15 +1,14 @@
-<script>
+<script lang="ts">
 	import Fa from 'svelte-fa';
 	import { faX, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-	import { getContext, createEventDispatcher } from 'svelte';
-	export let parkingSpace;
-	export let parking_space_availability_id;
+	import { getContext } from 'svelte';
+	export let parkingSpace: { id: number; name: string; color: string };
+	export let parking_space_availability_id: number;
 	export let hasForm = false;
-	export let onCancel = () => {};
-	export let onOkay = () => {};
+	export let onCancel: () => void = () => {};
+	export let onOkay: () => void = () => {};
 
 	const { close } = getContext('simple-modal');
-	const dispatch = createEventDispatcher();
 
 	let claimant_name = '';
 	let onChange = () => {};
@@ -32,7 +31,6 @@
 			})
 		});
 		let result = await res.json();
-		dispatch('parkingUpdated');
 		close();
 	}
 

@@ -9,7 +9,7 @@ const db = knex({
     useNullAsDefault: true
 });
 
-export async function GET(req) {
+export async function GET(req: any) {
     const parkingSpaces = await db.select('*').from('parking_spaces');
     return json(parkingSpaces);
 }
