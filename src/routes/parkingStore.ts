@@ -16,7 +16,7 @@ export const parkingStore = writable<ParkingStore>({
     selectedDate: new Date()  // You can initialize this with any default date you want
 });
 
-function fetchInitialData() {
+export function fetchInitialData() {
     axios.get<ParkingSpace[]>('/parkingSpaces')
         .then(({ data: parkingSpaces }) => {
             axios.get<ParkingAvailability[]>('/availability')
@@ -38,7 +38,7 @@ function fetchInitialData() {
 }
 
 
-async function fetchNewData() {
+export async function fetchNewData() {
     console.log('fetchNewData');
     try {
         const { data: parkingSpaces } = await axios.get<ParkingSpace[]>('/parkingSpaces');
@@ -56,5 +56,3 @@ async function fetchNewData() {
         console.error(error);
     }
 }
-
-export default fetchInitialData;

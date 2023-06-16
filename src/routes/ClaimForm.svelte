@@ -1,17 +1,18 @@
 <script lang="ts">
 	import Fa from 'svelte-fa';
-	import { faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-	import { getContext } from 'svelte';
-	export let parkingSpace: { id: number; name: string; color: string };
-	export let parking_space_availability_id: number;
+	import { faX, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+	import { getContext, createEventDispatcher } from 'svelte';
+	import type { ParkingClaim } from './parkingTypes';
 	export let hasForm = false;
 	export let onCancel: () => void = () => {};
 	export let onOkay: () => void = () => {};
 
 	const { close } = getContext('simple-modal');
 
-	let claimant_name = '';
+	let void_name: string | null = null;
+	export let claim: ParkingClaim;
 	let onChange = () => {};
+	const dispatch = createEventDispatcher();
 
 	function _onCancel() {
 		onCancel();
@@ -20,39 +21,40 @@
 
 	async function _onOkay() {
 		onOkay();
-		const res = await fetch('/claims/save', {
+		const res = await fetch('/claims/void', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				parking_space_availability_id: parking_space_availability_id,
-				claimant_name: claimant_name
+				id: claim.id,
+				void_name: void_name
 			})
 		});
 		let result = await res.json();
+		dispatch('saved', result);
 		close();
 	}
 
-	$: onChange(claimant_name);
+	$: onChange(void_name);
 </script>
 
-<div class="rounded p-2 bg-{parkingSpace.color}-500 px-4 w-96">
+<div class="rounded p-2 bg-zinc-500 px-4 w-96">
 	<div class="text-black">
-		{parking_space_availability_id}
-		{parkingSpace.id}
-		{parkingSpace.name}
+		{claim.id}
+		{claim.claimant_name}
+		{claim.claim_voided}
 	</div>
 
 	{#if hasForm}
 		<div class="">
-			<input type="hidden" bind:value={parkingSpace.id} />
+			<input type="hidden" bind:value={claim.id} />
 			<input
 				type="text"
-				bind:value={claimant_name}
+				bind:value={void_name}
 				required
 				class="form-input px-4 py-3 block w-full bg-black rounded text-white font-bold"
-				placeholder="Ditt namn"
+				placeholder="Fyll i samma namn för att makulera"
 			/>
 		</div>
 	{/if}

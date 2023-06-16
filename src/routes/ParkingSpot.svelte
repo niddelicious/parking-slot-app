@@ -6,6 +6,7 @@
 	import { getContext } from 'svelte';
 	import { get } from 'svelte/store';
 	import ParkingForm from './ParkingForm.svelte';
+	import ClaimForm from './ClaimForm.svelte';
 	import { parkingStore } from './parkingStore'; // Import the store here
 	import type { ParkingAvailability, ParkingSpace, ParkingClaim } from './parkingTypes';
 
@@ -18,7 +19,7 @@
 	let isAvailable = false;
 	let isWeekend = false;
 	let parking_space_availability_id: number | null = null;
-	let claimant_name: string | null = null;
+	let claim: ParkingClaim | null = null;
 
 	// You can retrieve the selected date from the store here
 	onMount(async () => {
@@ -41,7 +42,7 @@
 				);
 				console.log(parkingSpaceClaims);
 				isAvailable = false;
-				claimant_name = parkingSpaceClaims[0].claimant_name;
+				claim = parkingSpaceClaims[0];
 				parking_space_availability_id = parkingSpaceAvailability[0].id;
 			} else {
 				isAvailable = true;
@@ -51,7 +52,7 @@
 	}
 
 	function clearCache() {
-		claimant_name = null;
+		claim = null;
 		isAvailable = false;
 		parking_space_availability_id = null;
 	}
@@ -67,6 +68,14 @@
 			hasForm: true
 		});
 	}
+
+	function showClaimForm() {
+		console.log(claim);
+		open(ClaimForm, {
+			claim: claim,
+			hasForm: true
+		});
+	}
 </script>
 
 <div
@@ -75,8 +84,8 @@
 	<div
 		class="text-center font-bold bg-zinc-900 text-white py-2 px-16 rounded text-2xl flex justify-center items-center"
 	>
-		{#if claimant_name}
-			{claimant_name}
+		{#if claim}
+			{claim.claimant_name}
 		{:else}
 			{parkingSpace.name}
 		{/if}
@@ -86,8 +95,8 @@
 			<button on:click={showBookingForm}><Fa icon={faParking} size="10x" /></button>
 		{:else if isWeekend}
 			<Fa icon={faParking} size="10x" />
-		{:else if claimant_name}
-			<Fa icon={faCarAlt} size="10x" />
+		{:else if claim}
+			<button on:click={showClaimForm}><Fa icon={faCarAlt} size="10x" /></button>
 		{:else}
 			<Fa icon={faCar} size="10x" />
 		{/if}

@@ -5,13 +5,16 @@
 	import { parkingStore } from './parkingStore';
 	import { onMount } from 'svelte';
 
-	import fetchInitialData from './parkingStore';
+	import { fetchInitialData, fetchNewData } from './parkingStore';
 
 	$: parkingSpaces = $parkingStore.parkingSpaces;
 
 	onMount(async () => {
 		fetchInitialData();
 	});
+	async function fetchUpdatedData() {
+		await fetchNewData();
+	}
 </script>
 
 <Modal
@@ -21,6 +24,7 @@
 	classWindow="relative w-40 max-w-full max-h-full my-2 mx-auto text-white rounded shadow-md"
 	classContent="relative p-0 "
 	closeButton={false}
+	on:close={fetchUpdatedData}
 >
 	<div class="grid grid-cols-1 gap-4 h-full">
 		<!-- Universal date picker -->
