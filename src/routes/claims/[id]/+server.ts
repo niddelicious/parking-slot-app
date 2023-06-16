@@ -1,6 +1,5 @@
-import knex, { QueryBuilder } from 'knex';
+import knex from 'knex';
 import { json } from '@sveltejs/kit';
-import type { Request } from '@sveltejs/kit';
 
 interface Result {
     id: number;
@@ -28,13 +27,16 @@ const db = knex({
 });
 
 export async function GET({ params }: { params: { id: string } }) {
-    let parking_space_claims: Result[] = await db < Result > ('parking_space_claims')
+    let parking_space_claims: Result[] = await db<Result>('parking_space_claims')
         .select('*')
         .where('id', '=', params.id)
         .then((data: Result[]) => {
             return data;
         })
-        .catch((err: Error) => console.log(err));
+        .catch((err: Error) => {
+            console.log(err);
+            return [];
+        });
 
     const responseBody: ResponseBody = {
         success: true,

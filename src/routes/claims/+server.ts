@@ -1,7 +1,6 @@
-import knex, { QueryBuilder } from 'knex';
+import knex from 'knex';
 import { json } from '@sveltejs/kit';
 import dayjs from 'dayjs';
-import type { Request } from '@sveltejs/kit';
 import type { ParkingClaim } from '../parkingTypes';
 
 const db = knex({

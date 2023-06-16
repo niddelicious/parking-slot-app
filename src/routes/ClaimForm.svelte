@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Fa from 'svelte-fa';
-	import { faX, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+	import { faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 	import { getContext, createEventDispatcher } from 'svelte';
 	import type { ParkingClaim } from './parkingTypes';
 	export let hasForm = false;

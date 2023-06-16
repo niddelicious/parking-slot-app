@@ -1,6 +1,5 @@
-import knex, { QueryBuilder } from 'knex';
+import knex from 'knex';
 import { json } from '@sveltejs/kit';
-import type { Request } from '@sveltejs/kit';
 
 interface IncomingData {
     claimant_name: string;
@@ -41,7 +40,10 @@ export async function POST({ request }: { request: Request }) {
         .then((data: Result[]) => {
             return data;
         })
-        .catch((err: Error) => console.log(err));
+        .catch((err: Error) => {
+            console.log(err);
+            return [];
+        });
     let result_b: Result[] = await db<Result>('parking_space_availability')
         .update({ claimed: result_a[0].id })
         .where('id', '=', incomingData.parking_space_availability_id)
@@ -49,7 +51,10 @@ export async function POST({ request }: { request: Request }) {
         .then((data: Result[]) => {
             return data;
         })
-        .catch((err: Error) => console.log(err));
+        .catch((err: Error) => {
+            console.log(err);
+            return [];
+        });
 
     const responseBody: ResponseBody = {
         success: true,

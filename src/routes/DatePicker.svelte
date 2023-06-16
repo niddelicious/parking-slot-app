@@ -2,7 +2,7 @@
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/sv';
 	import { Datepicker, themes } from 'svelte-calendar';
-	import { parkingStore } from './parkingStore'; // import the store
+	import { parkingStore } from './parkingStore';
 	import type { Writable } from 'svelte/store';
 
 	const { dark: theme } = themes;
@@ -14,12 +14,10 @@
 	let locale = 'sv';
 	dayjs.locale(locale);
 
-	// The selected date is now obtained directly from the store
 	let datePicked = $parkingStore.selectedDate;
 
 	$: if ($store?.hasChosen) {
 		datePicked = $store.selected;
-		// Update the selectedDate in the parkingStore
 		parkingStore.update((store) => {
 			store.selectedDate = datePicked;
 			return store;

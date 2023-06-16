@@ -1,6 +1,5 @@
-import knex, { QueryBuilder } from 'knex';
+import knex from 'knex';
 import { json } from '@sveltejs/kit';
-import type { Request } from '@sveltejs/kit';
 
 interface IncomingData {
     parkingSpace: number;
@@ -45,7 +44,10 @@ export async function POST({ request }: { request: Request }) {
         .then((data: InsertedData[]) => {
             return data;
         })
-        .catch((err: Error) => console.log(err));
+        .catch((err: Error) => {
+            console.log(err)
+            return [];
+        });
 
     if (availability.length > 0) {
         const responseBody: ResponseBody = {
@@ -68,7 +70,10 @@ export async function POST({ request }: { request: Request }) {
         .then((data: InsertedData[]) => {
             return data;
         })
-        .catch((err: Error) => console.log(err));
+        .catch((err: Error) => {
+            console.log(err)
+            return [];
+        });
 
     const { parking_space_id, date } = insertedData;
 

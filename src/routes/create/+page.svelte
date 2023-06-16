@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
-	import { goto } from '$app/navigation';
+	import type { ParkingSpace } from '../parkingTypes';
 
 	const dispatch = createEventDispatcher();
 
-	let parkingSpaces = [Number];
-	let selectedParkingSpace;
+	let parkingSpaces: ParkingSpace[] = [];
+	let selectedParkingSpace: number;
 	let date = new Date().toISOString().slice(0, 10); // set date to today's date
 	let result_message = '';
 	onMount(async () => {
