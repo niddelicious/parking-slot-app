@@ -39,7 +39,6 @@ export function fetchInitialData() {
 
 
 export async function fetchNewData() {
-    console.log('fetchNewData');
     try {
         const { data: parkingSpaces } = await axios.get<ParkingSpace[]>('/parkingSpaces');
         const { data: availability } = await axios.get<ParkingAvailability[]>('/availability');
@@ -50,8 +49,6 @@ export async function fetchNewData() {
             store.parkingClaims = parkingClaims;
             return store;
         });
-        console.log('fetchNewData done');
-        console.log(parkingStore);
     } catch (error) {
         console.error(error);
     }

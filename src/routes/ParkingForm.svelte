@@ -38,10 +38,8 @@
 </script>
 
 <div class="rounded p-2 bg-{parkingSpace.color}-500 px-4 w-96">
-	<div class="text-black">
-		{parking_space_availability_id}
-		{parkingSpace.id}
-		{parkingSpace.name}
+	<div class="text-white bg-zinc-900 rounded px-4 py-2 mb-2 text-center font-bold">
+		Boka plats: {parkingSpace.name}
 	</div>
 
 	{#if hasForm}
@@ -52,7 +50,7 @@
 				bind:value={claimant_name}
 				required
 				class="form-input px-4 py-3 block w-full bg-black rounded text-white font-bold"
-				placeholder="Ditt namn"
+				placeholder="Fyll i ditt namn"
 			/>
 		</div>
 	{/if}

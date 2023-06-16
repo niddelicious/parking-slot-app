@@ -36,11 +36,9 @@
 		);
 		if (parkingSpaceAvailability.length > 0) {
 			if (parkingSpaceAvailability[0].claimed > 0) {
-				console.log(parkingSpaceAvailability[0]);
 				parkingSpaceClaims = store.parkingClaims.filter(
 					(claim) => claim.id === parkingSpaceAvailability[0].claimed
 				);
-				console.log(parkingSpaceClaims);
 				isAvailable = false;
 				claim = parkingSpaceClaims[0];
 				parking_space_availability_id = parkingSpaceAvailability[0].id;
@@ -70,7 +68,6 @@
 	}
 
 	function showClaimForm() {
-		console.log(claim);
 		open(ClaimForm, {
 			claim: claim,
 			hasForm: true

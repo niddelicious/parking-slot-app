@@ -40,10 +40,8 @@
 </script>
 
 <div class="rounded p-2 bg-zinc-500 px-4 w-96">
-	<div class="text-black">
-		{claim.id}
-		{claim.claimant_name}
-		{claim.claim_voided}
+	<div class="text-white bg-zinc-900 rounded px-4 py-2 mb-2 text-center font-bold">
+		Mackulera bokning: {claim.claimant_name}
 	</div>
 
 	{#if hasForm}
