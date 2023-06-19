@@ -39,10 +39,6 @@
 		in:receive|local={{ key }}
 		out:send|local={{ key }}
 	>
-		{#if $store?.hasChosen}
-			{dayjs($store.selected).format(defaultFormat)}
-		{:else}
-			{dayjs($parkingStore.selectedDate).format(defaultFormat)}
-		{/if}
+		{dayjs($parkingStore.selectedDate).format(defaultFormat)}
 	</button>
 </Datepicker>

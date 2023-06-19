@@ -16,8 +16,6 @@ interface ResultA {
 
 interface ResultB {
     id: number;
-    claimant_name?: string;
-    parking_space_availability_id?: number;
     claimed?: number;
 }
 
@@ -58,7 +56,7 @@ export async function POST({ request }: { request: Request }) {
 
     let result_b: ResultB[] = await db<ResultB>('parking_space_availability')
         .update({ claimed: 0 })
-        .where('id', '=', result_a[0].id)
+        .where('id', '=', result_a[0].parking_space_availability_id)
         .returning(['id', 'claimed'])
         .then((data: ResultB[]) => {
             return data;
