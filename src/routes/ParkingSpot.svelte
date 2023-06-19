@@ -129,7 +129,7 @@
 				{/if}
 				{dayjs(availability.date).format('DD/MM')}
 				{#if availability.claimed > 0}
-					<Fa icon={faCarAlt} size="md" class="inline-block" />
+					<Fa icon={faCarAlt} size="md" class="inline-block text-red-500" />
 				{/if}
 			</button>
 		{/each}
